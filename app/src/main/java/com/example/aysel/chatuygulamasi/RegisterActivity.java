@@ -21,12 +21,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText mName, mEmail, mPassword;
     Button mCreate;
     FirebaseAuth mAuth;
+    DatabaseReference mDatabase;
     private Toolbar mToolbar;
     ProgressDialog mProgressDialog;
 
@@ -58,7 +63,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             String Email = mEmail.getText().toString().trim();
             String Password = mPassword.getText().toString();
 
-            if(!TextUtils.isEmpty(Name) || !TextUtils.isEmpty(Email) || !TextUtils.isEmpty(Password)){
+            if (!TextUtils.isEmpty(Name) || !TextUtils.isEmpty(Email) || !TextUtils.isEmpty(Password)) {
                 mProgressDialog.setTitle("Registering User");
                 mProgressDialog.setMessage("Please wait while we create your account!");
                 mProgressDialog.setCanceledOnTouchOutside(false);
@@ -68,18 +73,40 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void Create(String name, String email, String password) {
+    private void Create(final String name, String email, String password) {
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            mProgressDialog.dismiss();
-                            Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                          //  mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(mainIntent);
-                            finish();
+                            FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                            String uid = current_user.getUid();
+                            mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                            HashMap<String, String> userMap = new HashMap<>();
+                            userMap.put("name", name);
+                            userMap.put("status", "Hi there I'm using Hanımeli Chat App");
+                            userMap.put("image", "default");
+                            userMap.put("thumb_image", "default");
+
+                            mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        mProgressDialog.dismiss();
+                                        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(mainIntent);
+                                        finish();
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    mProgressDialog.hide();
+                                    Toast.makeText(RegisterActivity.this, "Cannot Sign in. Please check the form and try again." + e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
