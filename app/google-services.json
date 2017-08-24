@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "338527382752",
+    "firebase_url": "https://chatuygulamasi-6716d.firebaseio.com",
+    "project_id": "chatuygulamasi-6716d",
+    "storage_bucket": "chatuygulamasi-6716d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338527382752:android:528b9cc1682ccbf9",
+        "android_client_info": {
+          "package_name": "com.example.aysel.chatuygulamasi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338527382752-4qjcoc89f99edt40p2fhnkcfj7iivfds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.aysel.chatuygulamasi",
+            "certificate_hash": "21aa80f4e38e0ca4fe28fb0e4c8c0815a89134ad"
+          }
+        },
+        {
+          "client_id": "338527382752-6c75ip11mvb9hm37n0hhruqp2vmdl7g1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsyowTfTqskb92gObOValNU75c5_C2gE0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338527382752-6c75ip11mvb9hm37n0hhruqp2vmdl7g1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
