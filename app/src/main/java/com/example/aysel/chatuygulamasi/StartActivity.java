@@ -15,7 +15,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_start);
 
         mRegisterBtn = findViewById(R.id.btnNew);
-        mLogin = findViewById(R.id.btnLogin);
+        mLogin = findViewById(R.id.btnGiris);
         mRegisterBtn.setOnClickListener(this);
         mLogin.setOnClickListener(this);
     }

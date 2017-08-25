@@ -24,16 +24,21 @@
         android:layout_below="@+id/circleImageView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="36dp"
+        android:textColor="@android:color/white"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:text="Display Name" />
 
     <TextView
         android:id="@+id/settings_status"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="Hi guys! I am using Hanımeli"
+        android:layout_marginTop="38dp"
+        android:text="@string/default_status"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/settings_display_name"
-        android:layout_alignEnd="@+id/settings_status_btn" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/settings_image_btn"

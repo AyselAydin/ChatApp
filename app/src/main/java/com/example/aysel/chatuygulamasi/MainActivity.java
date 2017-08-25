@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null) {
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendToStart() {
         Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
         startActivity(startIntent);
-        finish();
+       finish();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.main_logout) {
             FirebaseAuth.getInstance().signOut();
             sendToStart();
+        }
+        if(item.getItemId() == R.id.menu_accountSettings){
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settingsIntent);
         }
         return true;
     }
