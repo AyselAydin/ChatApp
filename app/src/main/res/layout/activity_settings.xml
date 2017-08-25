@@ -42,7 +42,7 @@
 
     <Button
         android:id="@+id/settings_image_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/settings_status"
         android:layout_centerHorizontal="true"
@@ -51,10 +51,12 @@
 
     <Button
         android:id="@+id/settings_status_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/settings_image_btn"
         android:layout_below="@+id/settings_image_btn"
         android:layout_marginTop="14dp"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
         android:text="Change Status" />
 </RelativeLayout>
