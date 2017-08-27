@@ -82,6 +82,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if (view == mProfileSendReqBtn) {
+
+            mProfileSendReqBtn.setEnabled(false);
+
+
+            //------------Not Friends State
             if (mCurrent_state.equals("not_friends")) {
                 mFriendReqDatabase.child(mCurrentUser.getUid()).child(user_id).child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -90,12 +95,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             mFriendReqDatabase.child(user_id).child(mCurrentUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+
+                                    mProfileSendReqBtn.setEnabled(true);
+                                    mCurrent_state = "req_sent";
+                                    mProfileSendReqBtn.setText("Cancel Friend Request");
+
                                     Toast.makeText(ProfileActivity.this, "Request Sent Successfully", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
                             Toast.makeText(ProfileActivity.this, "Failed Sending Request", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+            }
+
+            // ------------cancel Request State
+            if (mCurrent_state.equals("req_sent")) {
+                mFriendReqDatabase.child(mCurrentUser.getUid()).child(user_id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mFriendReqDatabase.child(user_id).child(mCurrentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                mProfileSendReqBtn.setEnabled(true);
+                mCurrent_state="not_friends";
+                mProfileSendReqBtn.setText("Send Friend Request");
+                            }
+                        });
                     }
                 });
             }
