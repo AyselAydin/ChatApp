@@ -69,7 +69,32 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                 Picasso.with(ProfileActivity.this).load(image).placeholder(R.drawable.defaultuser).into(mProfileImage);
 
-                mProgressDialog.dismiss();
+
+                //-------------Friends List / Request Feature
+                mFriendReqDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild(user_id)){
+                            String req_type = dataSnapshot.child(user_id).child("request_type").getValue().toString();
+                            if(req_type.equals("received")){
+                                mProfileSendReqBtn.setEnabled(true);
+                                mCurrent_state = "req_recevied";
+                                mProfileSendReqBtn.setText("Accept Friend Request");
+                            }
+                            else if(req_type.equals("sent")){
+                                mCurrent_state = "req_sent";
+                                mProfileSendReqBtn.setText("Cancel Friend Request");
+                            }
+                        }
+                        mProgressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
 
             @Override
