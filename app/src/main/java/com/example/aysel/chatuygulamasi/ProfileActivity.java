@@ -29,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     TextView mProfileName, mProfileStatus, mProfileFriendsCount;
     ImageView mProfileImage;
-    Button mProfileSendReqBtn;
+    Button mProfileSendReqBtn, mProfileDeclineReq;
     DatabaseReference mUsersDatabase, mFriendReqDatabase, mFriendDatabase;
     ProgressDialog mProgressDialog;
     FirebaseUser mCurrentUser;
@@ -48,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         mProfileImage = findViewById(R.id.profile_image);
+        mProfileDeclineReq = findViewById(R.id.profile_decline_btn);
         mProfileName = findViewById(R.id.profile_displayName);
         mProfileStatus = findViewById(R.id.profile_status);
         mProfileFriendsCount = findViewById(R.id.profile_totalFriends);
@@ -84,9 +85,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 mProfileSendReqBtn.setEnabled(true);
                                 mCurrent_state = "req_recevied";
                                 mProfileSendReqBtn.setText("Accept Friend Request");
+
+                                mProfileDeclineReq.setVisibility(View.VISIBLE);
+                                mProfileDeclineReq.setEnabled(true);
+
                             } else if (req_type.equals("sent")) {
                                 mCurrent_state = "req_sent";
                                 mProfileSendReqBtn.setText("Cancel Friend Request");
+
+                                mProfileDeclineReq.setVisibility(View.INVISIBLE);
+                                mProfileDeclineReq.setEnabled(false);
                             }
                             mProgressDialog.dismiss();
                         } else {
@@ -96,6 +104,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                     if(dataSnapshot.hasChild(user_id)){
                                         mCurrent_state = "friends";
                                         mProfileSendReqBtn.setText("Unfriend this Person");
+
+                                        mProfileDeclineReq.setVisibility(View.INVISIBLE);
+                                        mProfileDeclineReq.setEnabled(false);
                                     }
                                     mProgressDialog.dismiss();
                                 }
@@ -145,6 +156,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                     mCurrent_state = "req_sent";
                                     mProfileSendReqBtn.setText("Cancel Friend Request");
 
+                                    mProfileDeclineReq.setVisibility(View.INVISIBLE);
+                                    mProfileDeclineReq.setEnabled(false);
+
                                     // Toast.makeText(ProfileActivity.this, "Request Sent Successfully", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -168,6 +182,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 mProfileSendReqBtn.setEnabled(true);
                                 mCurrent_state = "not_friends";
                                 mProfileSendReqBtn.setText("Send Friend Request");
+
+                                mProfileDeclineReq.setVisibility(View.INVISIBLE);
+                                mProfileDeclineReq.setEnabled(false);
                             }
                         });
                     }
@@ -195,6 +212,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                                 mProfileSendReqBtn.setEnabled(true);
                                                 mCurrent_state = "friends";
                                                 mProfileSendReqBtn.setText("Unfriend this Person");
+
+                                                mProfileDeclineReq.setVisibility(View.INVISIBLE);
+                                                mProfileDeclineReq.setEnabled(false);
                                             }
                                         });
                                     }
