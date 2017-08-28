@@ -24,6 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -68,22 +70,38 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         String current_uid = mCurrentUser.getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+        mUserDatabase.keepSynced(true);
+
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 String name = dataSnapshot.child("name").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                final String image = dataSnapshot.child("image").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
                 String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 mName.setText(name);
                 mStatus.setText(status);
-                if(!image.equals("default")){
-                    Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultuser).into(mDisplayImage);
+                if (!image.equals("default")) {
+                    // Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultuser).into(mDisplayImage);
+
+                    Picasso.with(SettingsActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.defaultuser).into(mDisplayImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultuser).into(mDisplayImage);
+                        }
+                    });
                 }
             }
 
@@ -142,7 +160,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 String current_user_id = mCurrentUser.getUid();
                 Bitmap thumb_bitmap = null;
                 try {
-                     thumb_bitmap = new Compressor(this)
+                    thumb_bitmap = new Compressor(this)
                             .setMaxWidth(200)
                             .setMaxHeight(200)
                             .setQuality(75)
@@ -168,7 +186,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
                                     String thumb_downloadUri = thumb_task.getResult().getDownloadUrl().toString();
-                                    if(thumb_task.isSuccessful()){
+                                    if (thumb_task.isSuccessful()) {
 
                                         Map update_hasmap = new HashMap<>();
                                         update_hasmap.put("image", download_url);
@@ -183,8 +201,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                                 }
                                             }
                                         });
-                                    }
-                                    else{
+                                    } else {
                                         Toast.makeText(SettingsActivity.this, "Error in uploding", Toast.LENGTH_SHORT).show();
                                         mProgressDialog.dismiss();
                                     }

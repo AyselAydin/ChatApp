@@ -88,8 +88,25 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                                 mCurrent_state = "req_sent";
                                 mProfileSendReqBtn.setText("Cancel Friend Request");
                             }
+                            mProgressDialog.dismiss();
+                        } else {
+                            mFriendDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.hasChild(user_id)){
+                                        mCurrent_state = "friends";
+                                        mProfileSendReqBtn.setText("Unfriend this Person");
+                                    }
+                                    mProgressDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    mProgressDialog.dismiss();
+                                }
+                            });
                         }
-                        mProgressDialog.dismiss();
+
                     }
 
                     @Override
@@ -156,7 +173,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
             }
-
 
             //----------------- REQ RECEIVED STATE----------------
             if (mCurrent_state.equals("req_recevied")) {
